@@ -1,0 +1,101 @@
+<div th:fragment="sidebar" class="admin-sidebar">
+    <div class="admin-sidebar-header p-3">
+        <h4 class="text-center mb-0">DealHub Admin</h4>
+    </div>
+    <hr class="m-0">
+    <ul class="admin-sidebar-menu">
+        <!-- Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link active" th:href="@{/plataforma/admin/dashboard}">
+                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+            </a>
+        </li>
+
+        <!-- Usuários com submenu -->
+        <li class="nav-item has-submenu" >
+            <a class="nav-link" th:href="@{/plataforma/admin-user/usuarios/listar}">
+                <i class="fas fa-users me-2"></i> Usuários
+                <i class="fas fa-chevron-down submenu-toggle ms-auto"></i>
+            </a>
+            <ul class="submenu">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/plataforma/admin-user/usuarios/listar}">
+                        <i class="fas fa-list me-2"></i> Listar Usuários
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/plataforma/admin-user/usuarios/cadastro}">
+                        <i class="fas fa-user-plus me-2"></i> Cadastrar Usuário
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Produtos com submenu -->
+        <li class="nav-item has-submenu">
+            <a class="nav-link" th:href="@{/plataforma/admin-product/produtos/listar}">
+                <i class="fas fa-boxes me-2"></i> Produtos
+                <i class="fas fa-chevron-down submenu-toggle ms-auto"></i>
+            </a>
+            <ul class="submenu">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/plataforma/admin-product/produtos/listar}">
+                        <i class="fas fa-list me-2"></i> Listar Produtos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/plataforma/admin-product/produtos/cadastro}">
+                        <i class="fas fa-plus-circle me-2"></i> Cadastrar Produto
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Categorias com submenu -->
+        <li class="nav-item has-submenu">
+            <a class="nav-link" th:href="@{/plataforma/admin-categoria/categorias/listar}">
+                <i class="fas fa-tags me-2"></i> Categorias
+                <i class="fas fa-chevron-down submenu-toggle ms-auto"></i>
+            </a>
+            <ul class="submenu">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/plataforma/admin-categoria/categorias/listar}">
+                        <i class="fas fa-list me-2"></i> Listar Categorias
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/plataforma/admin-categoria/categorias/cadastro}">
+                        <i class="fas fa-plus-circle me-2"></i> Cadastrar Categoria
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Subcategorias com submenu -->
+        <li class="nav-item has-submenu">
+            <a class="nav-link" th:href="@{/plataforma/admin-subcategoria/subcategorias/listar}">
+                <i class="fas fa-tags me-2"></i> Subcategorias
+                <i class="fas fa-chevron-down submenu-toggle ms-auto"></i>
+            </a>
+            <ul class="submenu">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/plataforma/admin-subcategoria/subcategorias/listar}">
+                        <i class="fas fa-list me-2"></i> Listar Subcategorias
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/plataforma/admin-subcategoria/subcategorias/cadastro}">
+                        <i class="fas fa-plus-circle me-2"></i> Cadastrar Subcategoria
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Pedidos -->
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/plataforma/admin/pedidos/listar}">
+                <i class="fas fa-shopping-cart me-2"></i> Pedidos
+            </a>
+        </li>
+    </ul>
+</div>

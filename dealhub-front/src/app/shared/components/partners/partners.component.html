@@ -1,0 +1,21 @@
+<section class="py-16 bg-[var(--background-color)] text-[var(--text-color)] overflow-hidden">
+  <div class="max-w-7xl mx-auto space-y-8 text-center">
+    <h2 class="text-3xl font-bold text-[var(--primary-color)]">Nossos Parceiros</h2>
+    <p class="text-[var(--text-color-muted)] text-lg">
+      Trabalhamos com empresas que compartilham nossa visão de inovação e excelência.
+    </p>
+
+    <div class="relative w-full overflow-hidden">
+      <div class="flex gap-12 animate-scroll-logos whitespace-nowrap">
+        <!-- Primeira cópia -->
+        @for (partner of partners; track partner._id) {
+          <img src="{{partner.url}}" alt="{{partner.name}}" class="h-12 inline-block"/>
+        }
+        <!-- Segunda cópia (duplicada) -->
+        @for (partner of partners; track partner._id + '-copy') {
+          <img src="{{partner.url}}" alt="{{partner.name}}" class="h-12 inline-block"/>
+        }
+      </div>
+    </div>
+  </div>
+</section>

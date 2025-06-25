@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erro - DealHub</title>
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+</head>
+<body>
+    <div class="error-container">
+        <h1>Oops! Algo deu errado</h1>
+        
+        <div class="error-details">
+            <p class="error-status" th:text="${status}">500</p>
+            <p class="error-message" th:text="${message}">Erro interno do servidor</p>
+            <p class="error-exception" th:text="${exception}" style="font-size: 0.8em; color: #888;">Detalhes do erro</p>
+        </div>
+        
+        <a href="/" class="home-button">Voltar para página inicial</a>
+    </div>
+</body>
+</html>

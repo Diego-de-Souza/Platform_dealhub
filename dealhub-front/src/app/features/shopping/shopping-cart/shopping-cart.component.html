@@ -1,0 +1,67 @@
+<div class="min-h-screen bg-[var(--background-color)] text-[var(--text-color)]">
+  <dealhub-header></dealhub-header>
+
+  <section class="max-w-7xl mx-auto px-6 py-10">
+    <h1 class="text-3xl font-bold mb-8">Carrinho de Compras</h1>
+
+    @if (cartItems.length === 0) {
+        <p class="text-[var(text-color)])">Seu carrinho está vazio.</p>
+    } @else {
+        <div class="space-y-4">
+        @for (item of cartItems; track item.product.id) {
+            <div class="flex items-center gap-4 bg-[var(--card-bg)]  text-[var(--text-color)] p-4 rounded-xl shadow">
+            <img [src]="item.product.imagemPrincipal" alt="{{ item.product.name }}" class="w-24 h-24 object-cover rounded-md" />
+
+            <div class="flex-1">
+                <h2 class="font-semibold text-lg">{{ item.product.name }}</h2>
+                <p class="text-sm text-[var(--secondary-color)]">Preço: {{ item.product.price | currency:'BRL':'symbol' }}</p>
+
+                <div class="flex items-center gap-2 mt-2">
+                <label class="text-sm">Qtd:</label>
+                <input
+                    type="number"
+                    min="1"
+                    [(ngModel)]="item.quantity"
+                    (change)="alterarQuantidade(cartItems.indexOf(item), item.quantity)"
+                    class="w-16 border rounded-md px-2 py-1"
+                />
+                </div>
+            </div>
+
+            <div class="flex flex-col items-end gap-2">
+                <p class="font-semibold">
+                Total: {{ (item.product.price * item.quantity) | currency:'BRL':'symbol' }}
+                </p>
+                <button
+                (click)="removerItem(cartItems.indexOf(item))"
+                class="text-red-500 hover:text-red-700"
+                >
+                Remover
+                </button>
+            </div>
+            </div>
+        }
+        </div>
+
+        <div class="mt-6 flex justify-between items-center">
+        <p class="text-xl font-bold text-[var(--primary-color)]">
+            Total do Carrinho: {{ total | currency:'BRL':'symbol' }}
+        </p>
+        <button
+            (click)="voltarAsCompras()"
+            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+        >
+            Escolher mais itens
+        </button>
+        <button
+            (click)="irParaCheckout()"
+            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+        >
+            Finalizar Compra
+        </button>
+        </div>
+    }
+  </section>
+
+  <dealhub-footer></dealhub-footer>
+</div>

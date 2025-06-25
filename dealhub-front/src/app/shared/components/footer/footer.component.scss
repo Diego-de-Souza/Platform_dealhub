@@ -1,0 +1,57 @@
+:host {
+  display: block;
+}
+
+footer {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--footer-bg);
+  color: var(--text-color);
+}
+
+a {
+  text-decoration: none;
+}
+
+.social-icon {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  transition: all 0.4s ease;
+  font-size: 1.5rem;
+
+  &:hover {
+    background-color: rgba(34, 211, 238, 0.15);
+    color: var(--primary-color);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.7);
+  }
+}
+
+i {
+  pointer-events: none;
+}
+
+h2, h3 {
+  color: var(--secondary-color);
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+}
+
+ul li {
+  list-style: none;
+
+  a {
+    color: var(--text-color-muted);
+    transition: color 0.3s;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.blur-3xl {
+  filter: blur(120px);
+}

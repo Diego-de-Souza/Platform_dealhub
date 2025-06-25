@@ -1,0 +1,108 @@
+<div class="flex h-screen bg-gray-100">
+
+  <!-- Sidebar -->
+  <aside class="w-64 shadow-md flex flex-col container-aside">
+
+    <!-- Logo / título -->
+    <div class="p-4 text-2xl font-bold border-b border-gray-200">DealHub Admin</div>
+
+    <!-- Menu -->
+    <dealhub-menu-aside></dealhub-menu-aside>
+
+  </aside>
+
+  <!-- Conteúdo principal -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Header -->
+    <dealhub-header-platform titleHeader="Lista de Subcategorias"></dealhub-header-platform>
+
+    <main class="p-6 overflow-auto flex-1">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-semibold">Gerenciamento de Subcategorias</h1>
+
+        <div class="flex gap-4">
+          <div class="relative">
+            <input type="text" placeholder="Buscar subcategorias..."
+              [(ngModel)]="searchTerm"
+              class="border rounded px-3 py-2 w-64 focus:outline-none focus:ring focus:ring-blue-200">
+            <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+          </div>
+
+          <button routerLink="/subcategories/create"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2">
+            <i class="fas fa-plus"></i> Nova Subcategoria
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabela -->
+      <div class="bg-white rounded shadow overflow-x-auto">
+        <table class="min-w-full">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="p-4">
+                <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()">
+              </th>
+              <th class="text-left p-4">Subcategoria</th>
+              <th class="text-left p-4">Quant. Produtos</th>
+              <th class="text-center p-4">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subcategory of filteredSubcategories()" class="border-b hover:bg-gray-50">
+              <td class="p-4">
+                <input type="checkbox" [(ngModel)]="subcategory.selected">
+              </td>
+              <td class="p-4 flex items-center gap-3">
+                <i class="fas fa-tag text-2xl text-gray-500"></i>
+                <div>
+                  <div class="font-medium">{{ subcategory.nome }}</div>
+                  <div class="text-gray-500">{{ subcategory.nome.toLowerCase().replace(' ', '') }}</div>
+                </div>
+              </td>
+              <td class="p-4">{{ subcategory.quantidadeProdutos }}</td>
+              <td class="p-4 text-center">
+                <div class="flex justify-center gap-3">
+                  <a [routerLink]="['/subcategories/edit', subcategory.id]"
+                    class="text-blue-600 hover:text-blue-800" title="Editar">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <button (click)="deleteSubcategory(subcategory)" class="text-red-600 hover:text-red-800"
+                    title="Excluir">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Paginação -->
+      <div class="flex justify-between items-center mt-6">
+        <div class="text-sm text-gray-600">
+          Mostrando {{ subcategories.length }} de {{ subcategories.length }} subcategorias
+        </div>
+        <div class="flex gap-2">
+          <button class="px-3 py-1 border rounded" [disabled]="currentPage === 0"
+            (click)="previousPage()">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          <button *ngFor="let page of totalPagesArray()"
+            class="px-3 py-1 border rounded"
+            [ngClass]="currentPage === page ? 'bg-blue-600 text-white' : ''"
+            (click)="goToPage(page)">
+            {{ page + 1 }}
+          </button>
+
+          <button class="px-3 py-1 border rounded" [disabled]="currentPage === totalPages - 1"
+            (click)="nextPage()">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

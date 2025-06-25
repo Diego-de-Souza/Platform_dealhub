@@ -1,0 +1,67 @@
+@use 'sass:map';
+
+$themes: (
+  light: (
+    primary-color: #3B82F6,
+    secondary-color: #6366F1,
+    accent-color: #22C55E,
+    background-color: #F9FAFB,
+    card-bg: #FFFFFF,
+    text-color: #1F2937,
+    light-gray: #F3F4F6,
+    gray: #E5E7EB,
+    footer-bg: #f8fafc,
+    icon-color: #374151,
+    header-bg: #FFFFFF,
+    text-color-muted: #6b7280,
+    border-color: #d1d5db,
+    hover-select: #6b7280,
+    text-color-hover: #F8FAFC,
+    glow-color: #3B82F6,
+    glow-secondary: #6366F1,
+    gradient-start: #3B82F6,
+    gradient-end: #6366F1,
+    card-glow-bg: rgba(255, 255, 255, 0.7),
+    shadow-glow: 0 0 15px rgba(99, 102, 241, 0.4),
+  ),
+  dark: (
+    primary-color: #3B82F6,
+    secondary-color: #818CF8,
+    accent-color: #22C55E,
+    background-color: #0F172A,
+    card-bg: #1E293B,
+    text-color: #F8FAFC,
+    light-gray: #334155,
+    gray: #475569,
+    footer-bg: #0f172a,
+    icon-color: #CBD5E1,
+    header-bg: #1E293B,
+    text-color-muted: #9ca3af,
+    border-color: #334155,
+    hover-select: #F9FAFB,
+    text-color-hover: #1F2937,
+    glow-color: #22C55E,
+    glow-secondary: #818CF8,
+    gradient-start: #3B82F6,
+    gradient-end: #818CF8,
+    card-glow-bg: rgba(30, 41, 59, 0.7),
+    shadow-glow: 0 0 25px rgba(129, 140, 248, 0.6),
+  ),
+);
+
+
+@mixin apply-theme($theme-name) {
+  $theme: map.get($themes, $theme-name);
+
+  @each $key, $value in $theme {
+    --#{"" + $key}: #{$value};
+  }
+}
+
+.theme-light {
+  @include apply-theme(light);
+}
+
+.theme-dark {
+  @include apply-theme(dark);
+}

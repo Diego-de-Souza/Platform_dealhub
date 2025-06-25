@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="empty-cart" class="empty-cart">
+        <div class="empty-cart-icon">
+            <svg viewBox="0 0 24 24" width="120" height="120">
+                <path d="M19.5 6c-.83 0-1.5-.67-1.5-1.5S18.67 3 19.5 3s1.5.67 1.5 1.5S20.33 6 19.5 6zm-1.7 14c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm-.9-12h-13l.01-1.01c0-.54.45-.99.99-.99h1c.54 0 1-.45 1-.99 0-.55.45-1 1-1h5.03c.54 0 .97.45.97 1 0 .54.45.99.99.99h1.01c.54 0 .99.45.99.99L16.9 8zm2.8-4H17V2.5C17 1.67 16.33 1 15.5 1S14 1.67 14 2.5V4h-4V2.5C10 1.67 9.33 1 8.5 1S7 1.67 7 2.5V4H3.21c-1.09 0-1.99.89-1.99 1.99l-.02 13.04c0 1.09.89 1.98 1.98 1.98h16.64c1.09 0 1.98-.89 1.98-1.98l.02-13.04c0-1.1-.9-1.99-2-1.99z" fill="#ccc"/>
+            </svg>
+        </div>
+        <h2 class="empty-cart-title">Seu carrinho está vazio</h2>
+        <p class="empty-cart-message">Parece que você ainda não adicionou nenhum produto ao seu carrinho.</p>
+        <a href="/" class="start-shopping-btn">Começar a Comprar</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<div class="flex h-screen bg-gray-100">
+  <!-- Sidebar -->
+  <aside class="w-64 shadow-md flex flex-col container-aside">
+    <div class="p-4 text-2xl font-bold border-b border-gray-200">DealHub Admin</div>
+    <dealhub-menu-aside></dealhub-menu-aside>
+  </aside>
+
+  <!-- Conteúdo -->
+  <div class="flex-1 flex flex-col">
+    <dealhub-header-platform titleHeader="Criação de categorias"></dealhub-header-platform>
+
+    <main class="p-6 overflow-auto flex-1">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-semibold">
+          {{ isEditMode ? 'Editar Categoria' : 'Cadastrar Categoria' }}
+        </h1>
+      </div>
+
+      <form [formGroup]="categoriaForm" (ngSubmit)="submit()" class="space-y-6">
+        <!-- Seção Informações da Categoria -->
+        <div class="bg-white rounded shadow p-6">
+          <h2 class="text-lg font-semibold mb-4">Informações da Categoria</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="nome" class="block mb-1">Nome</label>
+              <input type="text" id="nome" formControlName="nome"
+                     class="w-full border-gray-200 bg-gray-100 rounded px-3 py-2" required />
+              <div *ngIf="categoriaForm.get('nome')?.invalid && categoriaForm.get('nome')?.touched"
+                   class="text-red-500 text-sm mt-1">
+                Nome é obrigatório.
+              </div>
+            </div>
+
+            <div>
+              <label for="descricao" class="block mb-1">Descrição</label>
+              <input type="text" id="descricao" formControlName="descricao"
+                     class="w-full border bg-gray-100 rounded px-3 py-2" required />
+              <div *ngIf="categoriaForm.get('descricao')?.invalid && categoriaForm.get('descricao')?.touched"
+                   class="text-red-500 text-sm mt-1">
+                Descrição é obrigatória.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="flex justify-end gap-4">
+          <button type="button" routerLink="/categorias"
+                  class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+            Cancelar
+          </button>
+          <button type="submit" [disabled]="categoriaForm.invalid"
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+            {{ isEditMode ? 'Atualizar Categoria' : 'Criar Categoria' }}
+          </button>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>

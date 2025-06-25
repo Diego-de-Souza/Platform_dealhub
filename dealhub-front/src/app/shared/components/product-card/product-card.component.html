@@ -1,0 +1,20 @@
+<div class="border rounded-lg p-4 shadow hover:shadow-lg transition">
+  <img [src]="produto.image" alt="{{produto.name}}" class="w-full h-48 object-cover mb-4">
+  <h3 class="font-semibold text-lg">{{produto.name}}</h3>
+  <p class="text-sm text-gray-500">{{produto.description}}</p>
+  <p class="mt-2 font-bold text-blue-600">R$ {{produto.price}}</p>
+
+  <div class="mt-4 flex flex-col">
+    <a 
+      [routerLink]="[`/shopping/product/:${produto._id}` ]"
+      class="px-6 py-2 rounded-xl m-2 border border-[var(--primary-color)] text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:text-white transition">
+      Ver mais
+    </a>
+    <a 
+      class="px-6 py-3 rounded-xl border border-[var(--primary-color)] text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:text-white transition"
+      (click)="adicionarAoCarrinho(produto)"
+      >
+      Adicionar ao Carrinho
+    </a>
+  </div>
+</div>

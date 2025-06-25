@@ -1,0 +1,83 @@
+<div class="min-h-screen bg-[var(--background-color)] text-[var(--text-color)]">
+  <dealhub-header></dealhub-header>
+    <div class="min-h-screen bg-[var(--background-color)] text-[var(--text-color)] py-10">
+    <div class="max-w-5xl mx-auto bg-[var(--gray)] p-8 rounded-2xl shadow-md border border-gray-200">
+        <h2 class="text-3xl font-bold mb-8 text-center">Finalizar Pedido</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Dados do Cliente -->
+        <div class="md:col-span-2">
+            <h3 class="text-xl font-semibold mb-4">Seus Dados</h3>
+            <form [formGroup]="checkoutForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                <label class="block mb-1 text-sm">Nome</label>
+                <input type="text" formControlName="nome"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <div>
+                <label class="block mb-1 text-sm">Email</label>
+                <input type="email" formControlName="email"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <div>
+                <label class="block mb-1 text-sm">Telefone</label>
+                <input type="text" formControlName="telefone"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <div>
+                <label class="block mb-1 text-sm">CEP</label>
+                <input type="text" formControlName="cep"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <div class="md:col-span-2">
+                <label class="block mb-1 text-sm">Endereço</label>
+                <input type="text" formControlName="endereco"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+            </div>
+
+            <!-- Método de pagamento -->
+            <h3 class="text-xl font-semibold mt-8 mb-4">Forma de Pagamento</h3>
+            <div class="space-y-3">
+                <label class="flex items-center">
+                <input type="radio" formControlName="pagamento" value="pix" class="mr-2" />
+                <span>Pix</span>
+                </label>
+                <label class="flex items-center">
+                <input type="radio" formControlName="pagamento" value="cartao" class="mr-2" />
+                <span>Cartão de Crédito</span>
+                </label>
+                <label class="flex items-center">
+                <input type="radio" formControlName="pagamento" value="boleto" class="mr-2" />
+                <span>Boleto Bancário</span>
+                </label>
+            </div>
+            </form>
+        </div>
+
+        <!-- Resumo do Pedido -->
+        <div>
+            <h3 class="text-xl font-semibold mb-4">Resumo do Pedido</h3>
+            <div class="space-y-4">
+            <div *ngFor="let item of cartItems" class="flex justify-between">
+                <span>{{ item.nome }} x{{ item.quantidade }}</span>
+                <span>R$ {{ item.preco * item.quantidade | number:'1.2-2' }}</span>
+            </div>
+            <hr />
+            <div class="flex justify-between font-semibold">
+                <span>Total</span>
+                <span>R$ {{ total | number:'1.2-2' }}</span>
+            </div>
+            </div>
+
+            <button (click)="finalizarPedido()"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg mt-6 transition">
+            Finalizar Pedido
+            </button>
+        </div>
+        </div>
+    </div>
+    </div>
+    <dealhub-footer></dealhub-footer>
+</div>

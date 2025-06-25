@@ -1,0 +1,42 @@
+<header class="shadow p-4 flex items-center justify-between container-menu">
+
+  <!-- Título da Página -->
+  <h1 class="text-xl font-semibold">{{titleHeader}}</h1>
+
+  <!-- Menu do Usuário -->
+  <div class="relative">
+    <button (click)="toggleUserMenu()" class="flex items-center gap-2 p-2 rounded hover:bg-gray-100">
+      <img src="https://i.pravatar.cc/40" alt="Avatar" class="w-8 h-8 rounded-full">
+      <span class="hidden md:block font-medium">Diego</span>
+      <i class="fas fa-chevron-down text-sm"></i>
+    </button>
+
+    <!-- Dropdown -->
+     @if(userMenuOpen){
+        <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+            <ul class="flex flex-col">
+                <li>
+                <a
+                    routerLink="/perfil"
+                    class="block px-4 py-2 hover:bg-gray-100 text-sm text-gray-700"
+                >
+                    <i class="fas fa-cog mr-2"></i>
+                    Configurações
+                </a>
+                </li>
+                <li>
+                <button
+                    (click)="logout()"
+                    class="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-gray-700"
+                >
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    Sair
+                </button>
+                </li>
+            </ul>
+        </div>
+     }
+    
+  </div>
+
+</header>

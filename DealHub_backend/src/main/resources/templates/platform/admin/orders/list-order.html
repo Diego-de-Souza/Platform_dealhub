@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pedidos | Sistema de Pedidos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link th:href="@{/css/platform/admin.css}" rel="stylesheet">
+    <link th:href="@{/css/platform/orders.css}" rel="stylesheet">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+<body>
+<div th:replace="~{platform/components/header :: header}" th:with="title='Lista de Pedidos'"></div>
+
+<div class="admin-container">
+    <!-- Sidebar -->
+    <div th:replace="~{platform/components/sidebar :: sidebar}"></div>
+    <div class="admin-main-content">
+        <header class="orders-page-header">
+            <h1><i class="fas fa-clipboard-list"></i> Lista de Pedidos</h1>
+            <div class="orders-actions">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Buscar pedidos...">
+                    <button id="searchButton"><i class="fas fa-search"></i></button>
+                </div>
+                <button id="filterButton" class="secondary-button"><i class="fas fa-filter"></i> Filtros</button>
+            </div>
+        </header>
+
+        <div class="filters-container" id="filtersContainer">
+            <div class="filter-group">
+                <label for="statusFilter">Status:</label>
+                <select id="statusFilter">
+                    <option value="all">Todos</option>
+                    <option value="pending">Pendente</option>
+                    <option value="processing">Processando</option>
+                    <option value="shipped">Enviado</option>
+                    <option value="delivered">Entregue</option>
+                    <option value="cancelled">Cancelado</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="dateFilter">Data:</label>
+                <select id="dateFilter">
+                    <option value="all">Todas</option>
+                    <option value="today">Hoje</option>
+                    <option value="week">Esta semana</option>
+                    <option value="month">Este mês</option>
+                    <option value="custom">Personalizado</option>
+                </select>
+            </div>
+            <div class="filter-group date-range" id="dateRangeGroup" style="display: none;">
+                <input type="date" id="startDate">
+                <span>até</span>
+                <input type="date" id="endDate">
+            </div>
+            <button id="applyFilters" class="primary-button">Aplicar</button>
+        </div>
+
+        <div class="orders-list-container">
+            <div class="orders-list-header">
+                <div class="order-id">Pedido #</div>
+                <div class="order-date">Data</div>
+                <div class="order-customer">Cliente</div>
+                <div class="order-value">Valor</div>
+                <div class="order-status">Status</div>
+            </div>
+
+            <div class="orders-list-body" id="ordersList">
+                <!-- Pedidos serão carregados aqui via JavaScript -->
+            </div>
+        </div>
+
+        <div class="orders-pagination">
+            <button id="prevPage" class="pagination-button" disabled><i class="fas fa-chevron-left"></i></button>
+            <span id="pageInfo" class="pagination-info">Página 1 de 1</span>
+            <button id="nextPage" class="pagination-button" disabled><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Detalhes do Pedido -->
+<div class="orders-modal-overlay" id="orderModal">
+    <div class="orders-modal-container">
+        <div class="orders-modal-header">
+            <h2 id="modalOrderTitle">Detalhes do Pedido #0000</h2>
+            <button class="orders-close-modal" id="closeModal"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="orders-modal-body" id="orderDetails">
+            <!-- Conteúdo será carregado via JavaScript -->
+        </div>
+        <div class="orders-modal-footer">
+            <button class="secondary-button" id="printOrder"><i class="fas fa-print"></i> Imprimir</button>
+            <button class="primary-button" id="saveChanges">Salvar Alterações</button>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/platform/admin-scripts.js}"></script>
+<script th:src="@{/js/platform/orders.js}"></script>
+</body>
+</html>

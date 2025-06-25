@@ -1,0 +1,68 @@
+<nav class="flex-1 overflow-y-auto">
+      <ul>
+        <li class="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+          <a routerLink="/platform/admin" class="flex items-center gap-2">
+            <i class="fas fa-tachometer-alt"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+          <div (click)="toggleMenu('users')" class="flex items-center justify-between cursor-pointer">
+            <span class="flex items-center gap-2">
+              <i class="fas fa-users"></i>
+              Usuários
+            </span>
+            <i [ngClass]="{'fa-chevron-down': !menus['users'], 'fa-chevron-up': menus['users']}" class="fas"></i>
+          </div>
+          <ul *ngIf="menus['users']" class="pl-8 mt-1 space-y-1 text-sm text-gray-600">
+            <li><a routerLink="/platform/list-users" class="block hover:text-blue-600">Listar Usuários</a></li>
+            <li><a routerLink="/platform/create-user" class="block hover:text-blue-600">Criar Usuário</a></li>
+          </ul>
+        </li>
+        <li class="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+          <div (click)="toggleMenu('products')" class="flex items-center justify-between cursor-pointer">
+            <span class="flex items-center gap-2">
+              <i class="fa-brands fa-product-hunt"></i>
+              Produtos
+            </span>
+            <i [ngClass]="{'fa-chevron-down': !menus['products'], 'fa-chevron-up': menus['products']}" class="fas"></i>
+          </div>
+          <ul *ngIf="menus['products']" class="pl-8 mt-1 space-y-1 text-sm text-gray-600">
+            <li><a routerLink="/platform/list-products" class="block hover:text-blue-600">Listar Produtos</a></li>
+            <li><a routerLink="/platform/create-product" class="block hover:text-blue-600">Criar Produto</a></li>
+          </ul>
+        </li>
+        <li class="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+          <div (click)="toggleMenu('categories')" class="flex items-center justify-between cursor-pointer">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-newspaper"></i>
+              Categorias
+            </span>
+            <i [ngClass]="{'fa-chevron-down': !menus['categories'], 'fa-chevron-up': menus['categories']}" class="fas"></i>
+          </div>
+          <ul *ngIf="menus['categories']" class="pl-8 mt-1 space-y-1 text-sm text-gray-600">
+            <li><a routerLink="/platform/list-categories" class="block hover:text-blue-600">Listar Categorias</a></li>
+            <li><a routerLink="/platform/create-category" class="block hover:text-blue-600">Criar Categoria</a></li>
+          </ul>
+        </li>
+        <li class="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+          <div (click)="toggleMenu('subcategories')" class="flex items-center justify-between cursor-pointer">
+            <span class="flex items-center gap-2">
+              <i class="fa fa-object-group"></i>
+              Subcategorias
+            </span>
+            <i [ngClass]="{'fa-chevron-down': !menus['subcategories'], 'fa-chevron-up': menus['subcategories']}" class="fas"></i>
+          </div>
+          <ul *ngIf="menus['subcategories']" class="pl-8 mt-1 space-y-1 text-sm text-gray-600">
+            <li><a routerLink="/platform/list-subcategories" class="block hover:text-blue-600">Listar Subcategorias</a></li>
+            <li><a routerLink="/platform/create-subcategory" class="block hover:text-blue-600">Criar Subcategoria</a></li>
+          </ul>
+        </li>
+        <li class="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+          <a routerLink="/platform/list-orders" class="flex items-center gap-2">
+            <i class="fa fa-shopping-bag"></i>
+            Pedidos
+        </a>
+        </li>
+      </ul>
+    </nav>

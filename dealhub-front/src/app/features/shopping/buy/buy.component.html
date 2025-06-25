@@ -1,0 +1,58 @@
+<div class="min-h-screen bg-[var(--background-color)] text-[var(--text-color)]">
+  <dealhub-header></dealhub-header>
+    <div class="flex">
+    
+    <!-- Menu Lateral -->
+    <aside class="w-64 p-4 border-r border-gray-200 dark:border-gray-700">
+        <h2 class="text-lg font-semibold mb-4">Categorias</h2>
+        <ul class="space-y-2">
+        @for (categoria of categorias; track categoria) {
+            <li>
+            <button (click)="selecionarCategoria(categoria)"
+                    class="text-left w-full hover:text-blue-600"
+                    [class.font-bold]="selectedCategory === categoria">
+                {{ categoria }}
+            </button>
+            </li>
+        }
+        </ul>
+
+        <h2 class="text-lg font-semibold mt-6 mb-4">Filtros</h2>
+        <ul class="space-y-2">
+        <li><button (click)="aplicarFiltro('mais-vendidos')" class="hover:text-blue-600">Mais vendidos</button></li>
+        <li><button (click)="aplicarFiltro('destaques')" class="hover:text-blue-600">Destaques</button></li>
+        <li><button (click)="aplicarFiltro('novidades')" class="hover:text-blue-600">Novidades</button></li>
+        <li><button (click)="aplicarFiltro('ofertas')" class="hover:text-blue-600">Ofertas</button></li>
+        </ul>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-1 p-6">
+        <h1 class="text-2xl font-bold mb-4">Produtos</h1>
+
+        @if (loading) {
+        <p>Carregando produtos...</p>
+        } @else {
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            @for (produto of produtos; track produto._id) {
+            <dealhub-product-card [produto]="produto"></dealhub-product-card>
+            }
+        </div>
+
+        <!-- Paginação -->
+        <div class="flex justify-center gap-2 mt-8">
+        @for (page of totalPaginas; track page) {
+                <button 
+                    (click)="mudarPagina(page)"
+                    class="px-3 py-1 rounded border"
+                    [class.bg-blue-600]="pagina === page"
+                    [class.text-white]="pagina === page">
+                    {{ page }}
+                </button>
+            }
+        </div>
+        }
+    </main>
+    </div>
+    <dealhub-footer></dealhub-footer>
+</div>

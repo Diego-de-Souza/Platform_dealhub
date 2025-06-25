@@ -1,0 +1,170 @@
+<header class="flex items-center justify-between px-6 py-4 shadow-md bg-[var(--header-bg)] text-[var(--text-color)]">
+  <!-- Logo -->
+  <div class="flex items-center gap-2">
+    <div class="logo-icon w-8 h-8 text-[var(--icon-color)]">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round" class="w-full h-full">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+        <path d="M2 17l10 5 10-5"></path>
+        <path d="M2 12l10 5 10-5"></path>
+      </svg>
+    </div>
+    <span class="logo-text text-xl font-semibold">DealHub</span>
+  </div>
+
+  <!-- Botão de menu hambúrguer para mobile -->
+  <button class="lg:hidden text-2xl" (click)="toggleMobileMenu()">
+    ☰
+  </button>
+
+  <!-- Navegação desktop -->
+  <nav class="flex gap-6 text-base lg:flex hidden">
+    <a routerLink="/home" routerLinkActive="font-bold text-[var(--gray)]">Home</a>
+
+    <a routerLink="/shopping/buy" routerLinkActive="font-bold text-[var(--gray)]">Compras</a>
+
+    <a routerLink="/institucional/about" routerLinkActive="font-bold text-[var(--gray)]">Sobre</a>
+
+    <!-- Item Termos com Submenu -->
+    <div class="relative" (document:click)="onClickOutside($event)">
+      <button
+        (click)="toggleSubmenu($event)"
+        class="cursor-pointer relative"
+        [ngClass]="{'font-bold text-[var(--gray)]': isSubmenuOpen}"
+      >
+        Termos
+        <svg
+          class="w-4 h-4 inline-block ml-1 transition-transform"
+          [ngClass]="{'rotate-180': isSubmenuOpen}"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+
+      <!-- Submenu -->
+      <div
+        *ngIf="isSubmenuOpen"
+        class="absolute left-0 top-full mt-2 w-56 rounded-md bg-[var(--header-bg)] text-[var(--text-color)] shadow-md z-50 transition-all duration-200 ease-in-out"
+      >
+        <ul class="flex flex-col text-sm text-gray-700">
+          <li>
+            <a
+              routerLink="/institucional/policy-privacy"
+              class="block px-4 py-2 text-[var(--text-color)]"
+              (click)="closeSubmenu()"
+              (mouseover)="hoverPrivacy = true"
+              (mouseout)="hoverPrivacy = false"
+              [style.background-color]="hoverPrivacy ? 'var(--hover-select)' : 'transparent'"
+              [style.color]="hoverPrivacy ? 'var(--text-color-hover)' : 'var(--text-color)'"
+            >
+              Política de Privacidade
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/institucional/terms"
+              class="block px-4 py-2 text-[var(--text-color)]"
+              (click)="closeSubmenu()"
+              (mouseover)="hoverSecurity = true"
+              (mouseout)="hoverSecurity = false"
+              [style.background-color]="hoverSecurity ? 'var(--hover-select)' : 'transparent'"
+              [style.color]="hoverSecurity ? 'var(--text-color-hover)' : 'var(--text-color)'"
+            >
+              Termo de Segurança
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/institucional/exchange-and-return"
+              class="block px-4 py-2 text-[var(--text-color)]"
+              (click)="closeSubmenu()"
+              (mouseover)="hoverExchange = true"
+              (mouseout)="hoverExchange = false"
+              [style.background-color]="hoverExchange ? 'var(--hover-select)' : 'transparent'"
+              [style.color]="hoverExchange ? 'var(--text-color-hover)' : 'var(--text-color)'"
+            >
+              Troca e Devolução
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <a routerLink="/shopping/shopping-cart" routerLinkActive="font-bold text-[var(--gray)]">
+      Carrinho
+    </a>
+  </nav>
+
+
+  <!-- Grupo de botões tema + login -->
+  <div class="flex items-center gap-4 lg:flex hidden">
+    <!-- Botão Toggle Tema -->
+    <button (click)="toggleTheme()"
+            class="px-4 py-2 rounded-md border text-sm transition-all"
+            [ngClass]="themeService.getTheme() === 'light' 
+              ? 'bg-white text-black border-gray-300 hover:bg-gray-100' 
+              : 'bg-gray-800 text-white border-gray-600 hover:bg-gray-700'">
+      {{ themeService.getTheme() === 'light' ? '🌞 Light' : '🌙 Dark' }}
+    </button>
+
+    <!-- Botão Login / Dropdown -->
+    <div class="relative lg:flex" tabindex="0" (blur)="closeDropdown()">
+        <button *ngIf="!isLoggedIn"
+                (click)="goToLogin()"
+                class="px-4 py-2 rounded-md border text-sm transition-all"
+                [ngClass]="themeService.getTheme() === 'light' 
+                    ? 'bg-white text-black border-gray-300 hover:bg-gray-100' 
+                    : 'bg-gray-800 text-white border-gray-600 hover:bg-gray-700'">
+            Login
+        </button>
+
+        <div *ngIf="isLoggedIn" (click)="toggleDropdown()">
+            <button
+            class="px-4 py-2 rounded-md border text-sm transition-all"
+            [ngClass]="themeService.getTheme() === 'light' 
+                ? 'bg-white text-black border-gray-300 hover:bg-gray-100' 
+                : 'bg-gray-800 text-white border-gray-600 hover:bg-gray-700'">
+            {{ userName }}
+            </button>
+
+            <!-- Dropdown -->
+            <div *ngIf="dropdownOpen" 
+                class="absolute right-0 mt-2 w-40 bg-[var(--card-bg)] rounded-md shadow-lg border border-gray-300 dark:border-gray-700 z-10">
+            <a routerLink="/perfil" class="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer">Perfil</a>
+            <button (click)="logout()" class="w-full text-left px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer">Sair</button>
+            </div>
+        </div>
+    </div>
+
+  </div>
+
+  <!-- Menu mobile (toggle) -->
+   @if(mobileMenuOpen){
+    <div>teste</div>
+      <div class="absolute top-full left-0 w-full bg-[var(--header-bg)] shadow-md flex flex-col items-start px-6 py-4 space-y-4 lg:hidden z-20">
+        <a routerLink="/home" routerLinkActive="font-bold text-[var(--gray)]">Home</a>
+        <a routerLink="/institucional/about" routerLinkActive="font-bold text-[var(--gray)]">Sobre</a>
+        <a routerLink="/institucional/termos" routerLinkActive="font-bold text-[var(--gray)]">Termos</a>
+        <a routerLink="/carrinho" routerLinkActive="font-bold text-[var(--gray)]">Carrinho</a>
+      
+        <!-- Botões tema e login -->
+        <button (click)="toggleTheme()" class="w-full text-left">
+          {{ themeService.getTheme() === 'light' ? '🌞 Light' : '🌙 Dark' }}
+        </button>
+
+        <ng-container *ngIf="!isLoggedIn; else loggedInBlock">
+          <button (click)="goToLogin()" class="w-full text-left">Login</button>
+        </ng-container>
+
+        <ng-template #loggedInBlock>
+          <span class="w-full text-left">{{ userName }}</span>
+          <button (click)="logout()" class="w-full text-left">Sair</button>
+        </ng-template>
+      </div>
+   }
+
+</header>

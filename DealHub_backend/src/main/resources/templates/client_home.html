@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DealHub - As melhores ofertas para você</title>
+    <link rel="stylesheet" th:href="@{/css/client_home.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <script th:src="@{/js/helpers/auth-helper.js}"></script>
+    <script th:src="@{/js/helpers/cart-helper.js}"></script>
+</head>
+<body>
+<div th:replace="components/navbar :: navbar"></div>
+
+<div class="main-container">
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Ofertas exclusivas todos os dias!</h1>
+            <p class="hero-subtitle">Encontre os melhores produtos com até 70% de desconto. Aproveite as ofertas por tempo limitado.</p>
+            <button class="hero-button">Ver ofertas</button>
+        </div>
+    </section>
+
+    <section class="products-section">
+        <div class="section-header">
+            <h2>Produtos em Destaque</h2>
+            <span class="debug-info" th:text="${'Total de produtos: ' + totalProdutos}"></span>
+        </div>
+
+        <div class="products-grid">
+            <div th:if="${produtosDestaque.empty}" class="no-products-message">
+                <p>Nenhum produto disponível no momento.</p>
+            </div>
+
+            <div th:each="produto : ${produtosDestaque}" class="product-card">
+                <div class="product-image">
+                    <!-- Badge de Desconto -->
+                    <span th:if="${produto.porcentagemDesconto != null && produto.porcentagemDesconto > 0}"
+                          class="discount-badge"
+                          th:text="${produto.porcentagemDesconto + '% OFF'}"></span>
+                    <img th:if="${!produto.imagens.empty}"
+                         th:src="@{'/api/produtos/imagens/' + ${produto.imagens[0].id}}"
+                         alt="Imagem do produto"
+                         onerror="this.onerror=null; this.src='/images/no-image.png';">
+                    <img th:if="${produto.imagens.empty}"
+                         th:src="@{/images/no-image.png}"
+                         alt="Sem imagem">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name" th:text="${produto.nome}">Nome do Produto</h3>
+                    <p class="product-category" th:text="${produto.categoria.nome}">Categoria</p>
+                    <p class="product-stock" th:if="${produto.estoque != null && produto.estoque > 0}">
+                        Disponível: <span th:text="${produto.estoque}"></span> unidades
+                    </p>
+                    <p class="product-stock-unavailable" th:if="${produto.estoque == null || produto.estoque <= 0}">
+                        Esgotado
+                    </p>
+                    <div class="product-price-container">
+                        <div th:if="${produto.porcentagemDesconto != null && produto.porcentagemDesconto > 0}">
+                            <span class="original-price"
+                                  th:text="${'De: R$ ' + #numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}">
+                            </span>
+                            <span class="discount-price"
+                                  th:text="${'Por: R$ ' + #numbers.formatDecimal(produto.preco * (1 - produto.porcentagemDesconto/100.0), 1, 'POINT', 2, 'COMMA')}">
+                            </span>
+                        </div>
+                        <span th:unless="${produto.porcentagemDesconto != null && produto.porcentagemDesconto > 0}"
+                              class="current-price"
+                              th:text="${'R$ ' + #numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}">
+                        </span>
+                    </div>
+                    <button
+                            class="add-to-cart-button"
+                            th:attr="data-id=${produto.id},
+                                 data-nome=${produto.nome},
+                                 data-preco=${produto.porcentagemDesconto != null && produto.porcentagemDesconto > 0 ? produto.preco * (1 - produto.porcentagemDesconto/100.0) : produto.preco},
+                                 data-imagem=${!produto.imagens.empty ? '/api/produtos/imagens/' + produto.imagens[0].id : '/images/no-image.png'}"
+                            data-quantidade="1"
+                            th:disabled="${produto.estoque == null || produto.estoque <= 0}">
+                        Adicionar ao carrinho
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="all-products-section">
+        <div class="section-header">
+            <h2>Todos os Produtos</h2>
+        </div>
+
+        <div class="products-grid">
+            <div th:if="${todosProdutos.empty}" class="no-products-message">
+                <p>Nenhum produto disponível no momento.</p>
+            </div>
+
+            <div th:each="produto : ${todosProdutos}" class="product-card">
+                <div class="product-image">
+                    <!-- Badge de Desconto -->
+                    <span th:if="${produto.porcentagemDesconto != null && produto.porcentagemDesconto > 0}"
+                          class="discount-badge"
+                          th:text="${produto.porcentagemDesconto + '% OFF'}"></span>
+                    <img th:if="${!produto.imagens.empty}"
+                         th:src="@{'/api/produtos/imagens/' + ${produto.imagens[0].id}}"
+                         alt="Imagem do produto"
+                         onerror="this.onerror=null; this.src='/images/no-image.png';">
+                    <img th:if="${produto.imagens.empty}"
+                         th:src="@{/images/no-image.png}"
+                         alt="Sem imagem">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name" th:text="${produto.nome}">Nome do Produto</h3>
+                    <p class="product-category" th:text="${produto.categoria.nome}">Categoria</p>
+                    <p class="product-stock" th:if="${produto.estoque != null && produto.estoque > 0}">
+                        Disponível: <span th:text="${produto.estoque}"></span> unidades
+                    </p>
+                    <p class="product-stock-unavailable" th:if="${produto.estoque == null || produto.estoque <= 0}">
+                        Esgotado
+                    </p>
+                    <div class="product-price-container">
+                        <div th:if="${produto.porcentagemDesconto != null && produto.porcentagemDesconto > 0}">
+                            <span class="original-price"
+                                  th:text="${'De: R$ ' + #numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}">
+                            </span>
+                            <span class="discount-price"
+                                  th:text="${'Por: R$ ' + #numbers.formatDecimal(produto.preco * (1 - produto.porcentagemDesconto/100.0), 1, 'POINT', 2, 'COMMA')}">
+                            </span>
+                        </div>
+                        <span th:unless="${produto.porcentagemDesconto != null && produto.porcentagemDesconto > 0}"
+                              class="current-price"
+                              th:text="${'R$ ' + #numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}">
+                        </span>
+                    </div>
+                    <button
+                            class="add-to-cart-button"
+                            th:attr="data-id=${produto.id},
+                                 data-nome=${produto.nome},
+                                 data-preco=${produto.porcentagemDesconto != null && produto.porcentagemDesconto > 0 ? produto.preco * (1 - produto.porcentagemDesconto/100.0) : produto.preco},
+                                 data-imagem=${!produto.imagens.empty ? '/api/produtos/imagens/' + produto.imagens[0].id : '/images/no-image.png'}"
+                            data-quantidade="1"
+                            th:disabled="${produto.estoque == null || produto.estoque <= 0}">
+                        Adicionar ao carrinho
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div th:replace="components/footer :: footer"></div>
+
+<script th:src="@{/js/page_scripts/client_home.js}"></script>
+</body>
+</html>

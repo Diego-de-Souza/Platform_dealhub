@@ -1,0 +1,61 @@
+<section class="py-16 px-6 bg-[var(--background-color)] text-[var(--text-color)]">
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-4xl font-extrabold text-center mb-12 tracking-tight">
+      💥 Ofertas Especiais
+    </h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      @defer (when hasOffers) {
+        @for (offer of specialOffers; track offer) {
+          <div 
+            class="relative bg-[var(--card-bg)] rounded-2xl overflow-hidden border border-[var(--gray)] hover:shadow-lg hover:border-[var(--primary-color)] transition-transform transform hover:scale-105"
+          >
+            <span class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">
+              {{ offer.discount }}% OFF
+            </span>
+
+            <img 
+              [src]="offer.image" 
+              [alt]="offer.title" 
+              class="w-full h-56 object-cover"
+            />
+
+            <div class="p-5">
+              <h3 class="text-xl font-semibold mb-2">
+                {{ offer.title }}
+              </h3>
+              <p class="text-sm mb-4 opacity-80">
+                {{ offer.description }}
+              </p>
+              
+              <div class="flex items-center justify-between">
+                <div class="space-x-2">
+                  <span class="text-red-500 text-lg font-bold">
+                    R$ {{ offer.promotionalPrice }}
+                  </span>
+                  <span class="line-through opacity-50 text-sm">
+                    R$ {{ offer.originalPrice }}
+                  </span>
+                </div>
+                <button 
+                  class="bg-[var(--primary-color)] hover:bg-[var(--secondary-color)] text-white text-sm px-4 py-1 rounded-full transition-shadow shadow-md hover:shadow-xl"
+                  (click)="buyItem(offer)"
+                  >
+                  Comprar
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      }
+
+      <ng-template #loading>
+        <div class="col-span-3 text-center text-[var(--text-color)] opacity-70 animate-pulse">
+          Carregando ofertas...
+        </div>
+      </ng-template>
+
+    </div>
+  </div>
+</section>

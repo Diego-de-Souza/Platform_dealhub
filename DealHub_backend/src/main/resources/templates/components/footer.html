@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        .footer {
+            background-color: #222;
+            color: #f1f1f1;
+            padding: 40px 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section {
+            flex: 1 1 200px;
+        }
+
+        .footer-section h3, .footer-section h4 {
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .footer-section p {
+            color: #ccc;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul li a {
+            color: #fff !important;
+            text-decoration: none!important;
+            transition: color 0.3s !important;
+            text-decoration: none !important;
+        }
+
+        #especial {
+            color: #fff !important;
+            text-decoration: none!important;
+            transition: color 0.3s !important;
+            text-decoration: none !important;
+        }
+
+        .footer-section ul li a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 30px;
+            border-top: 1px solid #444;
+            padding-top: 15px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .footer-section {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<footer class="footer" th:fragment="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>DealHub</h3>
+            <p>Sua loja online de confiança.</p>
+        </div>
+
+        <div class="footer-section">
+            <h4>Links Úteis</h4>
+            <ul>
+                <li><a href="/"  id="especial">🏠 Início</a></li>
+                <li><a href="/sobre"  class="especial">👥 Sobre Nós</a></li>
+                <li><a href="/contato"  class="especial">✉️ Contato</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>Atendimento</h4>
+            <ul>
+                <li><a href="/faq" class="especial">❓ FAQ</a></li>
+                <li><a href="/ajuda"  class="especial">🛠️ Ajuda</a></li>
+                <li><a href="/politica"  class="especial">🔒 Política de Privacidade</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2024 DealHub. Todos os direitos reservados.</p>
+    </div>
+</footer>
+</body>
+</html>

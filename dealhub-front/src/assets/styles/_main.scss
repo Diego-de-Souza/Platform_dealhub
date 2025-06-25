@@ -1,0 +1,12 @@
+@use 'variables';
+@use 'themes';
+@use 'global';
+@use 'fonts';
+
+body.theme-light {
+  @extend .theme-light;
+}
+
+body.theme-dark {
+  @extend .theme-dark;
+}

@@ -1,0 +1,16 @@
+/* Você pode complementar com estilos customizados, mas Tailwind deve cuidar da maior parte */
+:host{
+  .container-aside {
+        background-color: #4c52d9;
+  }
+
+  .admin-card-icon {
+    font-size: 1.5rem;
+  }
+
+  .admin-title {
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+}
+

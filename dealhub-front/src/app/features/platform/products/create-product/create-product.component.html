@@ -1,0 +1,154 @@
+<div class="flex h-screen bg-gray-100">
+  <!-- Sidebar -->
+  <aside class="w-64 shadow-md flex flex-col container-aside">
+    <!-- Logo / título -->
+    <div class="p-4 text-2xl font-bold border-b border-gray-200">DealHub Admin</div>
+    <!-- Menu -->
+    <dealhub-menu-aside></dealhub-menu-aside>
+  </aside>
+
+  <!-- Conteúdo -->
+  <div class="flex-1 flex flex-col">
+    <!-- Header -->
+    <dealhub-header-platform titleHeader="Criação de produtos"></dealhub-header-platform>
+
+    <main class="p-6 overflow-auto flex-1">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-semibold">
+          {{ isEditMode ? 'Editar Produto' : 'Cadastrar Produto' }}
+        </h1>
+      </div>
+
+      <form [formGroup]="productForm" (ngSubmit)="submit()" class="space-y-6">
+        <!-- Seção Informações Gerais -->
+        <div class="bg-white rounded shadow p-6">
+          <h2 class="text-lg font-semibold mb-4">Informações do Produto</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block mb-1">Nome</label>
+              <input type="text" formControlName="nome" class="w-full border rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block mb-1">Marca</label>
+              <input type="text" formControlName="marca" class="w-full border rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block mb-1">Modelo</label>
+              <input type="text" formControlName="modelo" class="w-full border rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block mb-1">Garantia</label>
+              <input type="text" formControlName="garantia" class="w-full border rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block mb-1">Preço</label>
+              <input type="number" formControlName="preco" class="w-full border rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block mb-1">Porcentagem Desconto (%)</label>
+              <input type="number" formControlName="porcentagemDesconto" class="w-full border rounded px-3 py-2" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Descrição -->
+        <div class="bg-white rounded shadow p-6">
+          <h2 class="text-lg font-semibold mb-4">Descrição</h2>
+          <textarea rows="4" formControlName="descricao" class="w-full border rounded px-3 py-2"></textarea>
+        </div>
+
+        <!-- Transporte -->
+        <div class="bg-white rounded shadow p-6">
+          <h2 class="text-lg font-semibold mb-4">Informações de Transporte</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block mb-1">Estoque</label>
+              <input type="number" formControlName="estoque" class="w-full border rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block mb-1">Peso (kg)</label>
+              <input type="number" formControlName="peso" class="w-full border rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block mb-1">Altura (m)</label>
+              <input type="number" formControlName="altura" class="w-full border rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block mb-1">Largura (m)</label>
+              <input type="number" formControlName="largura" class="w-full border rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block mb-1">Profundidade (m)</label>
+              <input type="number" formControlName="profundidade" class="w-full border rounded px-3 py-2" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Categoria -->
+        <div class="bg-white rounded shadow p-6">
+          <h2 class="text-lg font-semibold mb-4">Categoria</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block mb-1">Categoria</label>
+              <select formControlName="categoriaId" class="w-full border rounded px-3 py-2">
+                <option value="">Selecione</option>
+                <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nome }}</option>
+              </select>
+            </div>
+            <div>
+              <label class="block mb-1">Subcategoria</label>
+              <select formControlName="subcategoriaId" class="w-full border rounded px-3 py-2">
+                <option value="">Selecione</option>
+                <option *ngFor="let sub of subcategorias" [value]="sub.id">{{ sub.nome }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status e Imagens -->
+        <div class="bg-white rounded shadow p-6">
+          <h2 class="text-lg font-semibold mb-4">Status e Imagens</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block mb-1">Status</label>
+              <select formControlName="status" class="w-full border rounded px-3 py-2">
+                <option value="">Selecione</option>
+                <option *ngFor="let s of statusList" [value]="s">{{ s }}</option>
+              </select>
+            </div>
+            <div>
+              <label class="block mb-1">Imagens</label>
+              <input type="file" (change)="onFileChange($event)" multiple class="w-full" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Checkboxes -->
+        <div class="bg-white rounded shadow p-6">
+          <div class="flex items-center gap-4">
+            <label class="flex items-center gap-2">
+              <input type="checkbox" formControlName="destaque" />
+              <span>Destacar produto</span>
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="checkbox" formControlName="disponivel" />
+              <span>Disponível para venda</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="flex justify-end gap-4">
+          <button type="button" routerLink="/produtos"
+            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+            Cancelar
+          </button>
+          <button type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+            {{ isEditMode ? 'Atualizar Produto' : 'Cadastrar Produto' }}
+          </button>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>

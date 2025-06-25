@@ -1,0 +1,15 @@
+<div
+  *ngIf="toast.show()"
+  class="fixed top-5 right-5 z-50 flex items-center text-white px-4 py-3 rounded-lg shadow-lg animate-slide-in"
+  [ngClass]="bgColor"
+>
+  <span class="mr-2">
+    <ng-container [ngSwitch]="toast.type()">
+      <span *ngSwitchCase="'success'">✅</span>
+      <span *ngSwitchCase="'error'">❌</span>
+      <span *ngSwitchCase="'warning'">⚠️</span>
+      <span *ngSwitchCase="'info'">ℹ️</span>
+    </ng-container>
+  </span>
+  <span>{{ toast.message() }}</span>
+</div>

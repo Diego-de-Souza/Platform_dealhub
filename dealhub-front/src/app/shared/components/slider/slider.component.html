@@ -1,0 +1,56 @@
+<div class="relative w-full overflow-hidden shadow-lg">
+  <!-- Slides -->
+  <div
+    class="flex transition-transform duration-700 ease-in-out"
+    [style.transform]="'translateX(-' + currentSlide * 100 + '%)'"
+  >
+    <div
+      *ngFor="let slide of banner"
+      class="min-w-full h-[500px] bg-cover bg-center flex items-end justify-center align-end px-12 text-white mb-[-40]"
+      [style.backgroundImage]="'url(' + slide.url + ')'"
+    >
+      <div class="bg-[var(--header-bg)] opacity-70 p-6 rounded-xl backdrop-blur-sm max-w-xl mb-[010px] text-[var(--text-color)]">
+        <h2 class="text-3xl md:text-4xl font-bold mb-2">{{ slide.title }}</h2>
+        <p class="text-lg md:text-xl">{{ slide.subtitle }}</p>
+      </div>
+    </div>
+  </div>
+  <!-- Navegação -->
+  <button
+    (click)="prevSlide()"
+    class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full transition"
+  >
+    ‹
+  </button>
+  <button
+    (click)="nextSlide()"
+    class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-2 rounded-full transition"
+  >
+    ›
+  </button>
+
+  <!-- Indicadores -->
+  <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+    @for (slide of banner; track slide) {
+        <div
+            class="w-3 h-3 rounded-full cursor-pointer transition"
+            [ngClass]="{
+            'bg-white': currentSlide === $index,
+            'bg-white/50': currentSlide !== $index
+            }"
+            (click)="goToSlide($index)"
+        ></div>
+    }
+
+
+    <!-- <div
+      *ngFor="let slide of slides; let i = index"
+      class="w-3 h-3 rounded-full cursor-pointer transition"
+      [ngClass]="{
+        'bg-white': currentSlide === i,
+        'bg-white/50': currentSlide !== i
+      }"
+      (click)="goToSlide(i)"
+    ></div> -->
+  </div>
+</div>

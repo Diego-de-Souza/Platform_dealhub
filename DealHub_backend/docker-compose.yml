@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: dealhub_mysql
+    restart: always
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_DEFAULT_TIME_ZONE: '-03:00'
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: dealhub
+      MYSQL_USER: dealhub_user
+      MYSQL_PASSWORD: segredo123
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
