@@ -1,19 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ProductList } from 'app/core/interface/product.interface';
+import { ProductService } from 'app/core/services/product/product.service';
 import { HeaderPlatformComponent } from 'app/shared/components/header-platform/header-platform.component';
 import { MenuAsideComponent } from 'app/shared/components/menu-aside/menu-aside.component';
-
-interface Product {
-  id: number;
-  nome: string;
-  marca: string;
-  destaque: boolean;
-  visivel: boolean;
-  status: 'Ativo' | 'Inativo' | 'Descontinuado';
-  selected?: boolean;
-}
 
 @Component({
   selector: 'dealhub-list-products',
@@ -22,97 +14,77 @@ interface Product {
   styleUrl: './list-products.component.scss'
 })
 export class ListProductsComponent {
-   products: Product[] = [];
-  searchTerm: string = '';
-  selectAll: boolean = false;
+  products = signal<ProductList[]>([]);
+  searchTerm = signal('');
+  selectAll = signal(false);
 
-  // Paginação
-  currentPage: number = 0;
-  itemsPerPage: number = 10;
-  totalPages = 1;
+  currentPage = signal(0);
+  itemsPerPage = signal(10);
+  totalPages = signal(0);
 
-  constructor() {}
+  constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
-    // 🔥 Mock de produtos - aqui você pode substituir pela API futuramente
-    this.products = [
-      {
-        id: 1,
-        nome: 'Produto A',
-        marca: 'Marca X',
-        destaque: true,
-        visivel: true,
-        status: 'Ativo'
-      },
-      {
-        id: 2,
-        nome: 'Produto B',
-        marca: 'Marca Y',
-        destaque: false,
-        visivel: false,
-        status: 'Inativo'
-      },
-      {
-        id: 3,
-        nome: 'Produto C',
-        marca: 'Marca Z',
-        destaque: false,
-        visivel: true,
-        status: 'Descontinuado'
-      },
-      // ➕ Adicione mais produtos se quiser testar
-    ];
+    this.getProducts();
   }
 
-  // 🔍 Filtro de busca
-  filteredProducts(): Product[] {
-    const filtered = this.products.filter(product =>
-      product.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      product.marca.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-
-    const start = this.currentPage * this.itemsPerPage;
-    return filtered.slice(start, start + this.itemsPerPage);
-  }
-
-  // 🔄 Alternar seleção geral
-  toggleSelectAll() {
-    this.filteredProducts().forEach(product => {
-      product.selected = this.selectAll;
+  getProducts(){
+    this.productService.getListProducts(this.currentPage(), this.itemsPerPage()).subscribe({
+      next: (response) => {
+        this.products.set(response.content); 
+        this.totalPages.set(response.totalPages);
+      },
+      error: (err) => console.error('Erro:', err)
     });
   }
 
-  // 🗑️ Deletar produto
-  deleteProduct(product: Product) {
-    if (confirm(`Tem certeza que deseja excluir o produto ${product.nome}?`)) {
-      this.products = this.products.filter(p => p.id !== product.id);
-    }
-  }
-
-  // 🔢 Paginação
-  totalPagesArray(): number[] {
-    const total = Math.ceil(
-      this.products.filter(product =>
-        product.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        product.marca.toLowerCase().includes(this.searchTerm.toLowerCase())
-      ).length / this.itemsPerPage
+  filteredProducts() {
+    const term = this.searchTerm().toLowerCase();
+    return this.products().filter(product =>
+      product.nome.toLowerCase().includes(term) ||
+      product.marca.toLowerCase().includes(term)
     );
-    return Array.from({ length: total }, (_, i) => i);
   }
 
-  previousPage() {
-    if (this.currentPage > 0) {
-      this.currentPage--;
+  toggleSelectAll() {
+    this.selectAll.update(value => !value);
+    this.products.update(product => 
+      product.map(prod => ({ ...prod, selected: this.selectAll() }))
+    )
+  }
+  
+    deleteProduct(product: ProductList) {
+      const confirmDelete = confirm(`Excluir ${product.nome}?`);
+      if (confirmDelete) {
+        this.productService.deleteProduct(product.id).subscribe({
+          next: () => this.getProducts(),
+          error: (err) => console.error('Erro ao excluir:', err)
+        });
+      }
     }
-  }
-
-  nextPage() {
-    if (this.currentPage < this.totalPagesArray().length - 1) {
-      this.currentPage++;
+  
+    paginatedProducts() {
+      const startIndex = this.currentPage() * this.itemsPerPage();
+      return this.filteredProducts().slice(startIndex, startIndex + this.itemsPerPage());
     }
-  }
-
-  goToPage(page: number) {
-    this.currentPage = page;
-  }
+  
+    previousPage() {
+      if (this.currentPage() > 0) {
+        this.currentPage.update(p => p - 1);
+      }
+    }
+  
+    nextPage() {
+      if (this.currentPage() < this.totalPages() - 1) {
+        this.currentPage.update(p => p + 1);
+      }
+    }
+  
+    goToPage(page: number) {
+      this.currentPage.set(page);
+    }
+  
+    get pageNumbers(): number[] {
+      return Array.from({ length: this.totalPages() }, (_, i) => i);
+    }
 }

@@ -18,6 +18,12 @@ export const platformRoutes: Routes = [
         loadComponent: ()=> import('./users/create-user/create-user.component').then(m => m.CreateUserComponent)
     },
     {
+        path: 'create-user/:id',
+        title: 'User edit',
+        loadComponent: () =>
+            import('./users/create-user/create-user.component').then(m => m.CreateUserComponent),
+    },
+    {
         path: 'list-products',
         title: 'Products list',
         loadComponent: ()=> import('./products/list-products/list-products.component').then(m => m.ListProductsComponent)
@@ -25,6 +31,11 @@ export const platformRoutes: Routes = [
     {
         path: 'create-product',
         title: 'Product create',
+        loadComponent: ()=> import('./products/create-product/create-product.component').then(m => m.CreateProductComponent)
+    },
+    {
+        path: 'create-product/:id',
+        title: 'Product edit',
         loadComponent: ()=> import('./products/create-product/create-product.component').then(m => m.CreateProductComponent)
     },
     {

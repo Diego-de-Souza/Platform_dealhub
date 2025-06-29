@@ -114,7 +114,7 @@
             </div>
 
             <div class="flex items-center gap-2 mt-6">
-              <input type="checkbox" id="principal" [(ngModel)]="form.enderecoPrincipal" name="enderecoPrincipal">
+              <input type="checkbox" id="principal" [(ngModel)]="form.principal" name="principal">
               <label for="principal">Endereço principal</label>
             </div>
           </div>
@@ -129,14 +129,16 @@
               <label class="block mb-1">Senha</label>
               <input type="password" class="w-full border rounded px-3 py-2"
                      [(ngModel)]="form.senha" name="senha"
-                     [required]="!isEdit">
+                     [required]="!isEdit"
+                     placeholder="***************">
             </div>
 
             <div>
               <label class="block mb-1">Confirmar Senha</label>
               <input type="password" class="w-full border rounded px-3 py-2"
                      [(ngModel)]="form.confirmarSenha" name="confirmarSenha"
-                     [required]="!isEdit">
+                     [required]="!isEdit"
+                     placeholder="***************">
             </div>
           </div>
         </div>

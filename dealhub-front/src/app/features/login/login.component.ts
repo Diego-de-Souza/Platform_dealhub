@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from 'app/core/services/auth/auth.service';
 import { ToastService } from 'app/core/services/toast/toast.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private toast: ToastService
+    private toast: ToastService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -33,11 +35,22 @@ export class LoginComponent {
 
     const { email, password } = this.loginForm.value;
 
-    if (email === 'teste@email.com' && password === '123456') {
-      this.toast.showToast('Login realizado com sucesso!', 'success');
-      this.router.navigate(['/home']);
-    } else {
-      this.toast.showToast('Email ou senha inválidos.', 'error');
-    }
+    this.authService.login(email, password).subscribe({
+      next: () => {
+        this.toast.showToast('Login realizado com sucesso!', 'success');
+        const role = sessionStorage.getItem('role')
+        if(role === 'ADMIN'){
+          this.router.navigate(['/platform/admin'])
+        }else{
+          this.router.navigate(['/home']);
+        }
+        console.log("Seja Bem vindo ao nosso E-commerce")
+      },
+      error: (err) => {
+        const msg = err?.error || 'Email ou senha inválidos.';
+        this.toast.showToast(msg, 'error');
+      }
+    });
   }
+
 }

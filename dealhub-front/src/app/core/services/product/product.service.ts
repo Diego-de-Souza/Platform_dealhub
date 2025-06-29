@@ -1,12 +1,16 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { environment } from '@environment/environment';
 import { Novidades } from 'app/core/interface/new-product.interface';
 import { Product } from 'app/shared/storage/data/product.data';
-import { delay, of } from 'rxjs';
+import { delay, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
+
+  private readonly http = inject(HttpClient);
 
   private produtos: Novidades[] = Product;
 
@@ -27,5 +31,29 @@ export class ProductService {
     const totalPaginas = Math.ceil(filtrados.length / porPagina);
 
     return of({ produtos: paginaProdutos, totalPaginas }).pipe(delay(500));
+  }
+
+  getListProducts(page: number,size:number): Observable<any>{
+    return this.http.get<any>(`${environment.apiUrl}/plataforma/admin-product/produtos/listar?page=${page}&size=${size}`)
+  }
+
+  getDataProduct(id: number): Observable<any>{
+    return this.http.get<any>(`${environment.apiUrl}/plataforma/admin-product/${id}`);
+  }
+  
+  updateProduct(product: any, id:number): Observable<any>{
+    return this.http.post<any>(`${environment.apiUrl}/plataforma/admin-product/atualizar/${id}`, product)
+  }
+  
+  createProduct(product: any): Observable<any>{
+    return this.http.post<any>(`${environment.apiUrl}/plataforma/admin-product`, product);
+  }
+  
+  deleteProduct(id:number): Observable<any>{
+    return this.http.delete<any>(`${environment.apiUrl}/plataforma/admin-product/${id}`);
+  }
+
+  getAllStatus(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/plataforma/admin-product/status`)
   }
 }

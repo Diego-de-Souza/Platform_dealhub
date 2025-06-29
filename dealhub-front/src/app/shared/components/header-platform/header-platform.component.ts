@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'app/core/services/auth/auth.service';
+import { ToastService } from 'app/core/services/toast/toast.service';
 
 @Component({
   selector: 'dealhub-header-platform',
@@ -7,21 +10,35 @@ import { Component, Input } from '@angular/core';
   templateUrl: './header-platform.component.html',
   styleUrl: './header-platform.component.scss'
 })
-export class HeaderPlatformComponent {
+export class HeaderPlatformComponent implements OnInit {
   userMenuOpen = false;
+  userName: string | null = 'Usuário';
 
   @Input() titleHeader: String = "Dashboard";
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private toast: ToastService
+  ){}
+
+  ngOnInit(): void {
+    this.userName = sessionStorage.getItem('name')?.split(' ')[0] || null;
+  }
 
   toggleUserMenu() {
     this.userMenuOpen = !this.userMenuOpen;
   }
 
   logout() {
-    // Aqui você faz o processo de logout real
-    // Por exemplo:
-    console.log('Deslogando...');
-    // AuthService.logout(); --> seu serviço
-    // Redirecionar
-    // this.router.navigate(['/login']);
+    this.authService.logout().subscribe({
+      next: ()=>{
+        this.router.navigate(['/login']);
+      },
+      error: (err)=>{
+        const msg = err?.error || 'Ocorreu um erro ao tentar deslogar.';
+        this.toast.showToast(msg, 'error');
+      }
+    });    
   }
 }

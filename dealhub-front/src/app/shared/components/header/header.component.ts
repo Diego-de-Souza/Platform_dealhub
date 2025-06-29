@@ -1,8 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from 'app/core/services/auth/auth.service';
 import { StorageService } from 'app/core/services/storage/storage.service';
 import { ThemeService } from 'app/core/services/themes/theme.service';
+import { ToastComponent } from '../toast/toast.component';
+import { ToastService } from 'app/core/services/toast/toast.service';
 
 @Component({
   selector: 'dealhub-header',
@@ -11,10 +14,10 @@ import { ThemeService } from 'app/core/services/themes/theme.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit{
   dropdownOpen = false;
   isLoggedIn = false; // Atualize conforme sua lógica real
-  userName = 'Usuário';
+  userName: string | null = 'Usuário';
   
   isSubmenuOpen = false;
 
@@ -22,7 +25,17 @@ export class HeaderComponent {
   hoverSecurity = false;
   hoverExchange = false;
 
-  constructor(public themeService: ThemeService, private router: Router) {}
+  constructor(
+    public themeService: ThemeService, 
+    private router: Router,
+    private authService: AuthService,
+    private toast: ToastService
+  ) {}
+
+  ngOnInit(): void {
+    this.isLoggedIn = this.authService.isLoggedIn();
+    this.userName = sessionStorage.getItem('name')?.split(' ')[0] || null;
+  }
 
   toggleTheme() {
     this.themeService.toggleTheme();
@@ -37,10 +50,17 @@ export class HeaderComponent {
   }
 
   logout() {
-    this.isLoggedIn = false;
-    this.dropdownOpen = false;
-    // Aqui faça a limpeza de tokens etc
-    this.router.navigate(['/login']);
+    this.authService.logout().subscribe({
+      next: ()=>{
+        this.isLoggedIn = false;
+        this.dropdownOpen = false;
+        this.router.navigate(['/login']);
+      },
+      error: (err)=>{
+        const msg = err?.error || 'Ocorreu um erro ao tentar deslogar.';
+        this.toast.showToast(msg, 'error');
+      }
+    });    
   }
 
   goToLogin() {

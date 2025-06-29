@@ -128,7 +128,9 @@
             [ngClass]="themeService.getTheme() === 'light' 
                 ? 'bg-white text-black border-gray-300 hover:bg-gray-100' 
                 : 'bg-gray-800 text-white border-gray-600 hover:bg-gray-700'">
-            {{ userName }}
+              <img src="https://i.pravatar.cc/40" alt="Avatar" class="w-8 h-8 rounded-full">
+              <span class="hidden md:block font-medium">{{userName}}</span>
+              <i class="fas fa-chevron-down text-sm"></i>
             </button>
 
             <!-- Dropdown -->
