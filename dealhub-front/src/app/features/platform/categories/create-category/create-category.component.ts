@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CategoryService } from 'app/core/services/category/category.service';
+import { ToastService } from 'app/core/services/toast/toast.service';
 import { HeaderPlatformComponent } from 'app/shared/components/header-platform/header-platform.component';
 import { MenuAsideComponent } from 'app/shared/components/menu-aside/menu-aside.component';
 @Component({
@@ -22,11 +24,14 @@ export class CreateCategoryComponent {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private categoriaService: CategoryService,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
     this.categoriaForm = this.fb.group({
+      id: [''],
       nome: ['', Validators.required],
       descricao: ['', Validators.required],
     });
@@ -36,18 +41,24 @@ export class CreateCategoryComponent {
       if (id) {
         this.isEditMode = true;
         this.categoriaId = id;
-        this.loadCategoria(id);
+        this.loadCategoria(Number(id));
       }
     });
   }
 
-  loadCategoria(id: string) {
-    // Simula o carregamento dos dados da categoria
-    const categoria = {
-      nome: 'Eletrônicos',
-      descricao: 'Itens de tecnologia e informática'
-    };
-    this.categoriaForm.patchValue(categoria);
+  loadCategoria(id: number) {
+    this.categoriaService.getDataCategory(id).subscribe({
+      next: (response)=>{
+        this.categoriaForm.patchValue({
+          id: response.id,
+          nome: response.nome,
+          descricao: response.descricao
+        })
+
+        console.log(this.categoriaForm)
+      },
+      error: (err) => console.error('Erro ao buscar categoria:', err)
+    })
   }
 
   submit(): void {
@@ -55,11 +66,29 @@ export class CreateCategoryComponent {
 
     const dados = this.categoriaForm.value;
     if (this.isEditMode) {
-      console.log('Atualizar categoria:', dados);
-      // Chamada para atualizar categoria
+      this.categoriaService.updateCategory(dados,dados.id).subscribe({
+        next: () => {
+          this.toast.showToast('Categoria atualizado com sucesso!', 'success');
+          this.router.navigate(['/platform/list-categories']);
+        },
+        error: (err) => {
+          console.error('Erro ao atualizar categoria:', err);
+          const msg = err?.error || 'Não foi possível atualizar a categoria.';
+          this.toast.showToast(msg, 'error');
+        }
+      })
     } else {
-      console.log('Criar categoria:', dados);
-      // Chamada para criar nova categoria
+      this.categoriaService.createCategory(dados).subscribe({
+        next: () => {
+          this.toast.showToast('Categoria criada com sucesso!', 'success');
+          this.router.navigate(['/platform/list-categories']);
+        },
+        error: (err) => {
+          console.error('Erro ao criar categoria:', err);
+          const msg = err?.error || 'Não foi possível criar a categoria.';
+          this.toast.showToast(msg, 'error');
+        }
+      })
     }
 
     this.router.navigate(['/categorias']);

@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { CategoriaData } from 'app/core/interface/categoria.interface';
+import { CategoryService } from 'app/core/services/category/category.service';
 import { HeaderPlatformComponent } from 'app/shared/components/header-platform/header-platform.component';
 import { MenuAsideComponent } from 'app/shared/components/menu-aside/menu-aside.component';
 
@@ -11,27 +13,40 @@ import { MenuAsideComponent } from 'app/shared/components/menu-aside/menu-aside.
   templateUrl: './list-categories.component.html',
   styleUrl: './list-categories.component.scss'
 })
-export class ListCategoriesComponent {
-  categories = [
-    { id: 1, nome: 'Eletrônicos', ativa: true, quantidadeSubcategorias: 3, quantidadeProdutos: 150, selected: false },
-    { id: 2, nome: 'Vestuário', ativa: false, quantidadeSubcategorias: 5, quantidadeProdutos: 80, selected: false },
-    { id: 3, nome: 'Casa e Jardim', ativa: true, quantidadeSubcategorias: 2, quantidadeProdutos: 50, selected: false },
-    // ...adicione mais dados conforme sua API
-  ];
-
+export class ListCategoriesComponent implements OnInit{
+  categories: CategoriaData[] = [];
   searchTerm = '';
   selectAll = false;
   currentPage = 0;
+  totalPages = 0;
+  totalElements = 0;
   itemsPerPage = 10;
 
+  constructor(private categoryService: CategoryService) {}
+
+  ngOnInit(): void {
+    this.getDataCategory();
+  }
+
+  getDataCategory() {
+    this.categoryService.getAllDataCategories(this.currentPage, this.itemsPerPage).subscribe({
+      next: (response) => {
+        this.categories = response.categorias;
+        this.categories.filter((c: CategoriaData) =>
+          c.nome.toLowerCase().includes(this.searchTerm.toLowerCase())
+        );
+        this.currentPage = response.currentPage;
+        this.totalPages = response.totalPages;
+        this.totalElements = response.totalElements;
+      },
+      error: (err) => console.error('Erro ao buscar categorias:', err)
+    });
+  }
+
   filteredCategories() {
-    const filtered = this.categories.filter(c =>
+    return this.categories.filter(c =>
       c.nome.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
-
-    const start = this.currentPage * this.itemsPerPage;
-    const end = start + this.itemsPerPage;
-    return filtered.slice(start, end);
   }
 
   toggleSelectAll() {
@@ -39,33 +54,35 @@ export class ListCategoriesComponent {
   }
 
   totalPagesArray() {
-    const total = Math.ceil(
-      this.categories.filter(c =>
-        c.nome.toLowerCase().includes(this.searchTerm.toLowerCase())
-      ).length / this.itemsPerPage
-    );
-    return Array.from({ length: total }, (_, i) => i);
-  }
-
-  get totalPages() {
-    return this.totalPagesArray().length;
+    return Array.from({ length: this.totalPages }, (_, i) => i);
   }
 
   previousPage() {
-    if (this.currentPage > 0) this.currentPage--;
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.getDataCategory();
+    }
   }
 
   nextPage() {
-    if (this.currentPage < this.totalPages - 1) this.currentPage++;
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.getDataCategory();
+    }
   }
 
   goToPage(page: number) {
     this.currentPage = page;
+    this.getDataCategory();
   }
 
-  deleteCategory(categoria: any) {
+  deleteCategory(categoria: CategoriaData) {
     if (confirm(`Deseja realmente excluir a categoria "${categoria.nome}"?`)) {
-      this.categories = this.categories.filter(c => c.id !== categoria.id);
+      this.categoryService.deleteCategory(categoria.id).subscribe({
+        next: () => this.getDataCategory(),
+        error: (err) => console.error('Erro ao excluir:', err)
+      })
+      
     }
   }
 }

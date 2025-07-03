@@ -29,7 +29,7 @@
             <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
           </div>
 
-          <button routerLink="/subcategories/create"
+          <button routerLink="/platform/create-subcategory"
             class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2">
             <i class="fas fa-plus"></i> Nova Subcategoria
           </button>
@@ -64,7 +64,7 @@
               <td class="p-4">{{ subcategory.quantidadeProdutos }}</td>
               <td class="p-4 text-center">
                 <div class="flex justify-center gap-3">
-                  <a [routerLink]="['/subcategories/edit', subcategory.id]"
+                  <a [routerLink]="['/platform/create-subcategory/', subcategory.id]"
                     class="text-blue-600 hover:text-blue-800" title="Editar">
                     <i class="fas fa-edit"></i>
                   </a>

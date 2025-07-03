@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { OrderService } from 'app/core/services/order/order.service';
 import { HeaderPlatformComponent } from 'app/shared/components/header-platform/header-platform.component';
 import { MenuAsideComponent } from 'app/shared/components/menu-aside/menu-aside.component';
 
@@ -11,12 +12,13 @@ import { MenuAsideComponent } from 'app/shared/components/menu-aside/menu-aside.
   templateUrl: './list-orders.component.html',
   styleUrl: './list-orders.component.scss'
 })
-export class ListOrdersComponent {
+export class ListOrdersComponent implements OnInit {
    searchTerm = '';
   showFilters = false;
   filterStatus = 'all';
   filterDate = 'all';
   customStartDate: string = '';
+
   customEndDate: string = '';
 
   currentPage = 0;
@@ -30,6 +32,26 @@ export class ListOrdersComponent {
     { id: 1005, data: '2024-06-09', cliente: 'Rafael Costa', valor: 230.10, status: 'cancelled' },
     // ...simulados
   ];
+
+  constructor(private orderService: OrderService) {}
+  
+  ngOnInit() {
+    this.loadOrders();
+  }
+
+  loadOrders() {
+    this.orderService.getAllOrders(this.currentPage, this.itemsPerPage).subscribe({
+      next: (data) => {
+        console.log('Orders fetched successfully:', data);
+        this.orders = {
+          ...data.pedido
+        };
+      },
+      error: (error) => {
+        console.error('Error fetching orders:', error);
+      }
+    });
+  }
 
   toggleFilters() {
     this.showFilters = !this.showFilters;

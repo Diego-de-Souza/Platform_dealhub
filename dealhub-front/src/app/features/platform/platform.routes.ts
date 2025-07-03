@@ -49,6 +49,11 @@ export const platformRoutes: Routes = [
         loadComponent: ()=> import('./categories/create-category/create-category.component').then(m => m.CreateCategoryComponent)
     },
     {
+        path: 'create-category/:id',
+        title: 'Category edit',
+        loadComponent: ()=> import('./categories/create-category/create-category.component').then(m => m.CreateCategoryComponent)
+    },
+    {
         path: 'list-subcategories',
         title: 'Subcategories list',
         loadComponent: ()=> import('./subcategories/list-subcategories/list-subcategories.component').then(m => m.ListSubcategoriesComponent)
@@ -56,6 +61,11 @@ export const platformRoutes: Routes = [
     {
         path: 'create-subcategory',
         title: 'Subcategory create',
+        loadComponent: ()=> import('./subcategories/create-subcategory/create-subcategory.component').then(m => m.CreateSubcategoryComponent)
+    },
+    {
+        path: 'create-subcategory/:id',
+        title: 'Subcategory edit',
         loadComponent: ()=> import('./subcategories/create-subcategory/create-subcategory.component').then(m => m.CreateSubcategoryComponent)
     },
     {

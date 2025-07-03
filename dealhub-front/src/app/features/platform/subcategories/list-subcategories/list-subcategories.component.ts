@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { SubcategoryService } from 'app/core/services/subcategory/subcategory.service';
+import { ToastService } from 'app/core/services/toast/toast.service';
 import { HeaderPlatformComponent } from 'app/shared/components/header-platform/header-platform.component';
 import { MenuAsideComponent } from 'app/shared/components/menu-aside/menu-aside.component';
 
@@ -11,58 +13,78 @@ import { MenuAsideComponent } from 'app/shared/components/menu-aside/menu-aside.
   templateUrl: './list-subcategories.component.html',
   styleUrl: './list-subcategories.component.scss'
 })
-export class ListSubcategoriesComponent {
+export class ListSubcategoriesComponent implements OnInit {
+  subcategories: any[] = [];
   searchTerm = '';
   selectAll = false;
   currentPage = 0;
+  totalPages = 0;
+  totalElements = 0;
   itemsPerPage = 10;
 
-  subcategories = [
-    { id: 1, nome: 'Eletrônicos', quantidadeProdutos: 25, selected: false },
-    { id: 2, nome: 'Roupas', quantidadeProdutos: 15, selected: false },
-    { id: 3, nome: 'Esportes', quantidadeProdutos: 8, selected: false },
-    // ...simulados
-  ];
+  constructor(
+    private subcategoryService: SubcategoryService,
+    private toast: ToastService
+  ) {}
 
-  get totalPages() {
-    return Math.ceil(this.subcategories.length / this.itemsPerPage);
+  ngOnInit(): void {
+    this.getDataSubcategories();
+  }
+
+  getDataSubcategories() {
+    this.subcategoryService.getAllDataSubcategories(this.currentPage, this.itemsPerPage).subscribe({
+      next: (response) => {
+        this.subcategories = response.subcategorias.map((s: any) => ({
+          ...s,
+          selected: false
+        }));
+        this.currentPage = response.currentPage;
+        this.totalPages = response.totalPages;
+        this.totalElements = response.totalElements;
+      },
+      error: (err) => console.error('Erro ao buscar categorias:', err)
+    });
   }
 
   filteredSubcategories() {
-    let filtered = this.subcategories.filter(c =>
+    return this.subcategories.filter(c =>
       c.nome.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
-    const start = this.currentPage * this.itemsPerPage;
-    return filtered.slice(start, start + this.itemsPerPage);
   }
 
   toggleSelectAll() {
     this.filteredSubcategories().forEach(c => c.selected = this.selectAll);
   }
 
-  deleteSubcategory(subcategory: any) {
-    if (confirm(`Tem certeza que deseja excluir "${subcategory.nome}"?`)) {
-      this.subcategories = this.subcategories.filter(c => c.id !== subcategory.id);
-    }
-  }
-
   totalPagesArray() {
-    return Array(this.totalPages).fill(0).map((x, i) => i);
+    return Array.from({ length: this.totalPages }, (_, i) => i);
   }
 
   previousPage() {
     if (this.currentPage > 0) {
       this.currentPage--;
+      this.getDataSubcategories();
     }
   }
 
   nextPage() {
     if (this.currentPage < this.totalPages - 1) {
       this.currentPage++;
+      this.getDataSubcategories();
     }
   }
 
   goToPage(page: number) {
     this.currentPage = page;
+    this.getDataSubcategories();
+  }
+
+  deleteSubcategory(subcategory: any) {
+    if (confirm(`Deseja realmente excluir "${subcategory.nome}"?`)) {
+      this.subcategoryService.deleteSubcategory(subcategory.id).subscribe({
+        next: () => this.getDataSubcategories(),
+        error: (err) => console.error('Erro ao excluir:', err)
+      });
+    }
   }
 }

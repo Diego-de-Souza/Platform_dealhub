@@ -46,7 +46,7 @@ export class ProductService {
   }
   
   createProduct(product: any): Observable<any>{
-    return this.http.post<any>(`${environment.apiUrl}/plataforma/admin-product`, product);
+    return this.http.post<any>(`${environment.apiUrl}/plataforma/admin-product/cadastrar/plataforma`, product);
   }
   
   deleteProduct(id:number): Observable<any>{
